@@ -1,5 +1,6 @@
 package dom_parsing;
 
+import java.io.File;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -7,6 +8,8 @@ import org.w3c.dom.NodeList;
 import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
 
 public class Dom_Parsing {
 
@@ -27,6 +30,10 @@ public class Dom_Parsing {
                 }
                 System.out.println(">");
                 NodeList hijos = nodo.getChildNodes();
+                
+                for (int i = 0; i < hijos.getLength(); i++) {
+                    tratarNodo(hijos.item(i));
+                }
                 // tratar los hijos recursivamente
                 break;
             case Node.ATTRIBUTE_NODE:
@@ -36,7 +43,7 @@ public class Dom_Parsing {
             case Node.TEXT_NODE:
                 String texto = nodo.getNodeValue().trim();
                 if (!texto.equals("")) {
-                    System.out.println(ind + texto);
+                    System.out.println(texto); //esto iba (ind + texto)
                 }
                 break;
             case Node.CDATA_SECTION_NODE:
@@ -51,15 +58,20 @@ public class Dom_Parsing {
         }
     }
 
-    public static void main(String[] args) {
-
+    public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
+        
         DocumentBuilderFactory fact
                 = DocumentBuilderFactory.newInstance();
         // Crear nueva instancia de DOMBuilder a través factoria
         DocumentBuilder parser = fact.newDocumentBuilder();
-        parser.parse(fich);
-        Document doc = parser.getDocument();
+        parser.parse("/home/darkaliensky/Escritorio/ejemploDOM.xml");
+        Document doc = parser.parse(new File("/home/darkaliensky/Escritorio/ejemploDOM.xml"));
+        
         Dom_Parsing.tratarNodo(doc);
-
+        NodeList peliNodes = doc.getElementsByTagName("Pelicula");
+        
+        System.out.println(peliNodes.getLength());
+        
+        
     }
 }
