@@ -72,6 +72,5 @@ public class Dom_Parsing {
         
         System.out.println(peliNodes.getLength());
         
-        
     }
 }
